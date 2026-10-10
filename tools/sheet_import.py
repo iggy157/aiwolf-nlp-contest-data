@@ -35,10 +35,10 @@ def load_catalog():
 # ---------- セルの解釈 ----------
 def parse_date_cell(s):
     """2026/07/04 → date / 2026/07/06〜 → open / 2026/10/17〜10/21 → date,end"""
-    s = str(s).strip().replace("～", "〜").replace("-", "/")
+    s = str(s).strip().replace("～", "〜").replace("~", "〜").replace("-", "/")
     if not s: return None
     m = re.match(r"^(\d{4})/(\d{1,2})/(\d{1,2})\s*(〜\s*(?:(\d{4})/)?(\d{1,2})/(\d{1,2})|〜)?$", s)
-    if not m: return {"date": s}
+    if not m: return {"date": s, "_bad": True}
     out = {"date": datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))}
     if m.group(4) and m.group(4).strip() == "〜": out["open"] = True
     elif m.group(4): out["end"] = datetime.date(int(m.group(5) or m.group(1)), int(m.group(6)), int(m.group(7)))
@@ -116,6 +116,11 @@ def items_to_contest(cid, ja_items, en_items=None, catalog=None) -> dict:
         if not r.get("id"): continue
         r["tracks"] = [t for t in (r.get("tracks") or enabled) if t in enabled]
         ms = r.get("milestones") or {}
+        for k, m in ms.items():
+            if m.pop("_bad", False): out.setdefault("_warn", []).append(f"日程「{k}」の日付が読めません: {m.get('date')}（例: 2026/07/04、2026/07/06〜、2026/10/17〜10/21）")
+        def d(k): return str((ms.get(k) or {}).get("date") or "")
+        if d("registration") and d("main_start") and d("registration") > d("main_start"):
+            out.setdefault("_warn", []).append(f"登録締切 {d('registration')} が本戦開始 {d('main_start')} より後です")
         r["milestones"] = sorted(({"key": k, **{kk: vv for kk, vv in m.items() if vv not in (None, False, "")}} for k, m in ms.items() if m.get("date")),
                                  key=lambda m: str(m["date"]))
         rounds.append(r)
@@ -192,6 +197,7 @@ def import_grids(grids: dict, write=True, only=None, log=print):
         if not re.match(r"^[a-z0-9_]+$", cid):
             res["warnings"].append(f"{cid}: 大会 id は半角英小文字・数字・_ だけにしてください（この列は読みませんでした）"); continue
         c = items_to_contest(cid, column_items(ja, cid), column_items(en, cid), catalog)
+        for w in c.pop("_warn", []): res["warnings"].append(f"{cid}: {w}")
         if is_active(c):
             miss = missing_required(c)
             if miss: res["warnings"].append(f"{cid}: 未記入の必須項目 — " + "、".join(miss))
