@@ -119,6 +119,9 @@ def items_to_contest(cid, ja_items, en_items=None, catalog=None) -> dict:
         for k, m in ms.items():
             if m.pop("_bad", False): out.setdefault("_warn", []).append(f"日程「{k}」の日付が読めません: {m.get('date')}（例: 2026/07/04、2026/07/06〜、2026/10/17〜10/21）")
         def d(k): return str((ms.get(k) or {}).get("date") or "")
+        vs = str((out.get("venue") or {}).get("start") or "")
+        if vs and d("main_start") and vs < d("main_start"):
+            out.setdefault("_warn", []).append(f"学会期間（開始）{vs} が本戦開始 {d('main_start')} より前です（年の書き間違い？）")
         if d("registration") and d("main_start") and d("registration") > d("main_start"):
             out.setdefault("_warn", []).append(f"登録締切 {d('registration')} が本戦開始 {d('main_start')} より後です")
         lab, lab_en = f.get("milestone_keys", {}), f.get("milestone_keys_en", {})
