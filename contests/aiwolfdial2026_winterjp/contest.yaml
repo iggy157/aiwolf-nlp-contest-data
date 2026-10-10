@@ -6,6 +6,7 @@ language: ja
 site_language: ja
 owners:
 - yharada
+form_url: https://docs.google.com/forms/d/e/1FAIpQLSdX5u4LZdlrnC4UKzIM_r3VXRLpMvbiAZZtp9ZGgGHPhh7etw/viewform
 venue:
   name: 言語処理学会第33回年次大会 (NLP2027)
   url: https://www.anlp.jp/
