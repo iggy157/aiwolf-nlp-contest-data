@@ -280,7 +280,6 @@ extra:
 milestone_keys:
   registration: 登録締切
   connection_check: 接続確認締切
-  qualifier: 予選締切
   main_start: 本戦開始
   results: 結果返却
   paper: 論文締切
