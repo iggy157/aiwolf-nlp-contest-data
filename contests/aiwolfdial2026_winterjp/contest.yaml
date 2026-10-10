@@ -4,6 +4,7 @@ kind: domestic
 name: 2026 冬季国内大会
 language: ja
 site_language: ja
+form_url: https://docs.google.com/forms/d/e/1FAIpQLScEaatUbAEK359nC0TLpgIkGbXtMZ4pLTeKfA3AknmJB5Y1yQ/viewform
 paper_submission: false
 rules_profile: domestic
 rules:
