@@ -6,6 +6,12 @@ language: ja
 site_language: ja
 form_url: https://docs.google.com/forms/d/e/1FAIpQLScEaatUbAEK359nC0TLpgIkGbXtMZ4pLTeKfA3AknmJB5Y1yQ/viewform
 paper_submission: false
+venue:
+  name: 言語処理学会2027 (NLP2027)
+  url: https://www.anlp.jp/
+  place: 福岡国際会議場
+  start: 2027-03-15
+  end: 2027-03-19
 rules_profile: domestic
 rules:
   talk_chars: 50
@@ -40,8 +46,19 @@ tracks:
   - 12
 rounds:
 - id: main
+  milestones:
+  - key: main_start
+    date: 2026-12-14
+    name: 本戦開始（オンライン対戦）
+  - key: results
+    date: 2026-12-28
+  - key: registration
+    date: 2027-12-01
+    name: 参加チームの参加登録締切／接続確認締切
+  - key: awards
+    date: 2027/03/15~03/19
+    name: 結果発表・表彰など
   tracks:
   - turn5
   - turn9
   - anytime5
-  milestones: []
