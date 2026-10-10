@@ -1,53 +1,116 @@
+# 大会定義シートから生成（tools/sheet_import.py）。直すときはシートを直して「大会データを更新」を押す。
 id: inlg_2026
-kind: international            # domestic | international
+kind: international
 name: 2026 国際大会（INLG 2026）
 name_en: International Contest 2026 (INLG 2026)
-language: en                   # 対戦で使う言語
-owners: [yharada]           # 通知の宛先（ops の config.yaml の people のキー）
+language: en
+site_language: both
+owners:
+- yharada
 form_url: https://forms.gle/53MJBSaLTe6xDw5o6
 paper_submission: true
-
 venue:
   name: INLG 2026
   url: https://2026.inlgmeeting.org/
   place: オランダ・ユトレヒト
-  place_en: Utrecht, the Netherlands
   start: 2026-10-17
   end: 2026-10-21
-
+  place_en: Utrecht, the Netherlands
+rules_profile: international
 rules:
-  talk_chars: 125              # 1 発話の文字数上限
-  mention_chars: null          # メンション部分の追加上限（無ければ null）
+  talk_chars: 125
+  mention_chars: null
   response_timeout_sec: 60
   anytime_talks_per_day: 4
   anytime_phase_min: 10
-
-tracks:                        # 表示順
-  - {id: turn5,    name: ターン式 × 5人村,     name_en: Turn-Based × 5-player village,    size: 5, mode: turn,    games_per_team: [75, 100]}
-  - {id: turn9,    name: ターン式 × 9人村,     name_en: Turn-Based × 9-player village,    size: 9, mode: turn,    games_per_team: [12, 18]}
-  - {id: anytime5, name: いつでも発話 × 5人村, name_en: Speak-Anytime × 5-player village, size: 5, mode: anytime, games_per_team: [8, 12]}
-
+tracks:
+- id: turn5
+  name: ターン式 × 5人村
+  name_en: Turn-Based × 5-player village
+  size: 5
+  mode: turn
+  games_per_team:
+  - 75
+  - 100
+- id: turn9
+  name: ターン式 × 9人村
+  name_en: Turn-Based × 9-player village
+  size: 9
+  mode: turn
+  games_per_team:
+  - 12
+  - 18
+- id: anytime5
+  name: いつでも発話 × 5人村
+  name_en: Speak-Anytime × 5-player village
+  size: 5
+  mode: anytime
+  games_per_team:
+  - 8
+  - 12
 rounds:
-  - id: r1
-    public_name: INLG            # ログの公開先 /var/www/html/aiwolf/<年>/<public_name>/
-    name: 1次（INLG main conference 向け）
-    name_en: Round 1 (for the INLG main conference)
-    tracks: [turn5, turn9, anytime5]
-    milestones:
-      - {key: registration, date: 2026-07-04, name: 「1次＋2次」参加チームの参加登録締切／接続確認締切, name_en: Registration / connection check deadline for "Round 1 + Round 2" teams}
-      - {key: main_start,   date: 2026-07-06, open: true, name: 1次本戦（オンライン対戦）, name_en: Round 1 Main Competition (online matches)}
-      - {key: results,      date: 2026-07-10, name: 1次結果返却, name_en: Round 1 results returned}
-      - {key: paper,        date: 2026-07-15, name: INLG main conference 論文締切, name_en: INLG main conference paper deadline}
-  - id: r2
-    public_name: INLG2
-    name: 2次（AIWolfDial 2026 ワークショップ向け）
-    name_en: Round 2 (for the AIWolfDial 2026 workshop)
-    tracks: [turn5, turn9, anytime5]
-    milestones:
-      - {key: registration, date: 2026-08-01, name: 「2次のみ」参加チームの参加登録締切／2次の接続確認締切, name_en: Registration / connection check deadline for "Round 2 only" teams}
-      - {key: main_start,   date: 2026-08-03, open: true, name: 2次本戦（オンライン対戦）, name_en: Round 2 Main Competition (online matches)}
-      - {key: results,      date: 2026-08-10, name: 2次結果返却, name_en: Round 2 results returned}
-      - {key: paper,        date: 2026-08-19, name: AIWolfDial 2026 ワークショップ論文締切（INLG main conference の採択通知後／main 不採択でも投稿可）, name_en: AIWolfDial 2026 workshop paper deadline (after the INLG main conference acceptance notification; submittable even if rejected from the main conference)}
-      - {key: notification, date: 2026-09-07, name: 採択通知, name_en: Notification of acceptance}
-      - {key: camera_ready, date: 2026-09-15, name: カメラレディ原稿締切, name_en: Camera-ready deadline}
-      - {key: workshop,     date: 2026-10-17, end: 2026-10-21, name: "AIWolfDial 2026 ワークショップ／[INLG 2026](https://2026.inlgmeeting.org/) カンファレンス（ユトレヒト）", name_en: "AIWolfDial 2026 workshop / [INLG 2026](https://2026.inlgmeeting.org/) conference (Utrecht)"}
+- id: r1
+  name: 1次（INLG main conference 向け）
+  public_name: INLG
+  milestones:
+  - key: registration
+    date: 2026-07-04
+    name: 「1次＋2次」参加チームの参加登録締切／接続確認締切
+    name_en: Registration / connection check deadline for "Round 1 + Round 2" teams
+  - key: main_start
+    date: 2026-07-06
+    open: true
+    name: 1次本戦（オンライン対戦）
+    name_en: Round 1 Main Competition (online matches)
+  - key: results
+    date: 2026-07-10
+    name: 1次結果返却
+    name_en: Round 1 results returned
+  - key: paper
+    date: 2026-07-15
+    name: INLG main conference 論文締切
+    name_en: INLG main conference paper deadline
+  name_en: Round 1 (for the INLG main conference)
+  tracks:
+  - turn5
+  - turn9
+  - anytime5
+- id: r2
+  name: 2次（AIWolfDial 2026 ワークショップ向け）
+  public_name: INLG2
+  milestones:
+  - key: registration
+    date: 2026-08-01
+    name: 「2次のみ」参加チームの参加登録締切／2次の接続確認締切
+    name_en: Registration / connection check deadline for "Round 2 only" teams
+  - key: main_start
+    date: 2026-08-03
+    open: true
+    name: 2次本戦（オンライン対戦）
+    name_en: Round 2 Main Competition (online matches)
+  - key: results
+    date: 2026-08-10
+    name: 2次結果返却
+    name_en: Round 2 results returned
+  - key: paper
+    date: 2026-08-19
+    name: AIWolfDial 2026 ワークショップ論文締切（INLG main conference の採択通知後／main 不採択でも投稿可）
+    name_en: AIWolfDial 2026 workshop paper deadline (after the INLG main conference acceptance notification; submittable even if rejected from the main conference)
+  - key: notification
+    date: 2026-09-07
+    name: 採択通知
+    name_en: Notification of acceptance
+  - key: camera_ready
+    date: 2026-09-15
+    name: カメラレディ原稿締切
+    name_en: Camera-ready deadline
+  - key: workshop
+    date: 2026-10-17
+    end: 2026-10-21
+    name: AIWolfDial 2026 ワークショップ／[INLG 2026](https://2026.inlgmeeting.org/) カンファレンス（ユトレヒト）
+    name_en: AIWolfDial 2026 workshop / [INLG 2026](https://2026.inlgmeeting.org/) conference (Utrecht)
+  name_en: Round 2 (for the AIWolfDial 2026 workshop)
+  tracks:
+  - turn5
+  - turn9
+  - anytime5
