@@ -312,3 +312,14 @@ rules:
     type: int
     desc: '例: 10'
 use_legend: D 列の用途。＊はその用途で必須。D1 で用途を選ぶと、必須の行が濃い黄色、使うだけの行が薄い黄色、空の必須が赤になる
+milestone_keys_en:
+  registration: Registration deadline
+  connection_check: Connection check deadline
+  main_start: Main round starts
+  results: Results returned
+  paper: Paper deadline
+  notification: Notification of acceptance
+  camera_ready: Camera-ready deadline
+  workshop: Workshop
+  awards: Results and awards
+  other: Other

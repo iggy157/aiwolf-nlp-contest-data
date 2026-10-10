@@ -121,6 +121,10 @@ def items_to_contest(cid, ja_items, en_items=None, catalog=None) -> dict:
         def d(k): return str((ms.get(k) or {}).get("date") or "")
         if d("registration") and d("main_start") and d("registration") > d("main_start"):
             out.setdefault("_warn", []).append(f"登録締切 {d('registration')} が本戦開始 {d('main_start')} より後です")
+        lab, lab_en = f.get("milestone_keys", {}), f.get("milestone_keys_en", {})
+        for k, m in ms.items():                       # 表示文が空なら種類の名前（登録締切など）を出す
+            if m.get("date") and not m.get("name"): m["name"] = lab.get(k, k)
+            if m.get("date") and out.get("site_language") in ("en", "both") and not m.get("name_en"): m["name_en"] = lab_en.get(k, k)
         r["milestones"] = sorted(({"key": k, **{kk: vv for kk, vv in m.items() if vv not in (None, False, "")}} for k, m in ms.items() if m.get("date")),
                                  key=lambda m: str(m["date"]))
         rounds.append(r)
