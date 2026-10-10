@@ -4,6 +4,8 @@ kind: domestic
 name: 2026 冬季国内大会
 language: ja
 site_language: ja
+owners:
+- yharada
 form_url: https://docs.google.com/forms/d/e/1FAIpQLScEaatUbAEK359nC0TLpgIkGbXtMZ4pLTeKfA3AknmJB5Y1yQ/viewform
 paper_submission: false
 venue:
@@ -47,16 +49,17 @@ tracks:
 rounds:
 - id: main
   milestones:
+  - key: registration
+    date: 2026-12-01
+    name: 参加チームの参加登録締切／接続確認締切
   - key: main_start
     date: 2026-12-14
     name: 本戦開始（オンライン対戦）
   - key: results
     date: 2026-12-28
-  - key: registration
-    date: 2027-12-01
-    name: 参加チームの参加登録締切／接続確認締切
   - key: awards
-    date: 2027/03/15~03/19
+    date: 2027-03-15
+    end: 2027-03-19
     name: 結果発表・表彰など
   tracks:
   - turn5
