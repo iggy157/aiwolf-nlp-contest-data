@@ -57,7 +57,7 @@ rounds:
   - key: registration
     date: 2026-05-01
     name: 参加登録〆切
-  - key: qualifier
+  - key: connection_check
     date: 2026-05-09
     name: 予選(自己対戦) 結果提出〆切
   - key: main_start
