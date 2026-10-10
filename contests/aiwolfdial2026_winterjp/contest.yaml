@@ -57,6 +57,7 @@ rounds:
     name: 本戦開始（オンライン対戦）
   - key: results
     date: 2026-12-28
+    name: 結果返却
   - key: awards
     date: 2027-03-15
     end: 2027-03-19
