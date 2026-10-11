@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       book_id: {description: スプレッドシート id, required: true}
-      gids: {description: タブ名 → gid の JSON, required: true}
+      gids: {description: タブ名 → gid の JSON（公開シートを読むとき）, required: false, default: ""}
+      payload: {description: シートの中身（gzip+base64 の JSON）, required: false, default: ""}
       actor: {description: 押した人, required: false, default: ""}
 permissions:
   contents: write
@@ -18,6 +19,7 @@ jobs:
       TZ: Asia/Tokyo
       BOOK: ${{ inputs.book_id }}
       GIDS: ${{ inputs.gids }}
+      SHEET_PAYLOAD: ${{ inputs.payload }}
       ACTOR: ${{ inputs.actor }}
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +27,9 @@ jobs:
         with: {python-version: "3.12"}
       - run: pip install -q pyyaml
       - id: imp
-        run: python tools/sheet_import.py --book "$BOOK" --gids "$GIDS"
+        run: |
+          if [ -n "$SHEET_PAYLOAD" ]; then python tools/sheet_import.py --book "$BOOK" --payload-env SHEET_PAYLOAD
+          else python tools/sheet_import.py --book "$BOOK" --gids "$GIDS"; fi
       - name: commit and push
         env:
           CHANGED: ${{ steps.imp.outputs.changed }}

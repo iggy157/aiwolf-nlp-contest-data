@@ -5,12 +5,13 @@
 「大会_en」（同じ形で英語の項目）、「トラック」「トラック_en」「ルール」（大会横断）。
 読むのは B 列のキーと 1 行目の id だけ。A 列の文言や行の並びは自由に変えてよい。
 
-    python tools/sheet_import.py --gids '{"大会": 123, ...}'      # 公開シートを CSV で読む（GitHub Actions が使う）
+    python tools/sheet_import.py --payload-env SHEET_PAYLOAD      # シートのボタンが渡す中身（gzip+base64 の JSON）を読む（GitHub Actions が使う）
+    python tools/sheet_import.py --gids '{"大会": 123, ...}'      # 公開シートを CSV で読む（シートを公開しているときだけ）
     python tools/sheet_import.py --gids ... --dry-run               # 書かずに差分だけ
 
 ほかのプログラムからは import_grids(grids) を呼ぶ（grids はタブ名 → 2 次元配列）。依存は PyYAML だけ。
 """
-import argparse, csv, datetime, difflib, io, json, os, re, sys, urllib.request
+import argparse, base64, csv, datetime, difflib, gzip, io, json, os, re, sys, urllib.request
 from pathlib import Path
 import yaml
 
@@ -229,13 +230,21 @@ def fetch_csv(book_id: str, gid) -> list[list[str]]:
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--book", help="スプレッドシート id（既定は sheet.yaml）")
-    ap.add_argument("--gids", required=True, help='タブ名 → gid の JSON')
+    ap.add_argument("--gids", help='タブ名 → gid の JSON（公開シートを CSV で読むとき）')
+    ap.add_argument("--payload-env", help="シートの中身（gzip+base64 の JSON。タブ名 → 2 次元配列）が入った環境変数の名前")
     ap.add_argument("--only", nargs="*"); ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     book = yaml.safe_load((ROOT / "sheet.yaml").read_text(encoding="utf-8"))["book_id"]
     if a.book and a.book != book: raise SystemExit(f"sheet.yaml の book_id と違うシートです: {a.book}")
-    gids = json.loads(a.gids)
-    grids = {name: fetch_csv(book, gid) for name, gid in gids.items() if name in (TAB_JA, TAB_EN, "トラック", "トラック_en", "ルール")}
+    names = (TAB_JA, TAB_EN, "トラック", "トラック_en", "ルール")
+    payload = os.environ.get(a.payload_env or "", "") if a.payload_env else ""
+    if payload:
+        grids = json.loads(gzip.decompress(base64.b64decode(payload)).decode("utf-8"))
+        grids = {k: [[str(c) for c in row] for row in v] for k, v in grids.items() if k in names}
+    elif a.gids:
+        grids = {name: fetch_csv(book, gid) for name, gid in json.loads(a.gids).items() if name in names}
+    else:
+        raise SystemExit("--payload-env か --gids のどちらかが要ります")
     if TAB_JA not in grids: raise SystemExit("タブ「大会」がありません")
     res = import_grids(grids, write=not a.dry_run, only=a.only)
     for w in res["warnings"]: print(f"::warning::{w}")
